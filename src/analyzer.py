@@ -56,7 +56,9 @@ class Analyzer:
     def from_hdf5(cls: Type[T], path: Path_s, load_prev_run: bool = True, **kwargs) -> T:
         if Path(path).suffix != ".hdf5":
             logging.warning("Calling from_hdf5 but file does not have extension .hdf5.")
-
+            
+        print(locals().keys())
+            
         return cls(
             path=path,
             load_prev_run=load_prev_run,

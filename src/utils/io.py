@@ -122,8 +122,8 @@ def _hdf5_get(names: List[str], func: Callable[[str, str], Any], err: BaseExcept
                 if not skip_na:
                     raise e
     return objs
-    
-    
+
+
 def hdf5_load(path: Path_s, group: str, *,
               arrs: List_str = None, dfs: List_str = None, params: List_str = None,
               skip_na: bool = True) -> Dict[str, Any]:
