@@ -13,15 +13,20 @@ import papermill as pm
 
 """
 
-data_path = "data/superstim_TX57.hdf5"
+# +
+name, date = 'TX56', '2020_08_04'
+data_path = '/groups/stringer/home/josephs2/data/text30k_sort_%s_%s.npz' % (name, date)
+hdf5_path = '/groups/stringer/home/josephs2/data/text30k_sort_%s_%s.hdf5' % (name, date)
+
 nbs = ["preprocess", "run_rf", "retinotopy", "cca_stimuli"]
 path_output = Path("outputs/")
+# -
 
 parameters = dict(
     path_npz=Path(data_path).with_suffix(".npz").as_posix(),
-    path_loader=data_path,
-    path_rf=data_path,
-    path_gabor=data_path,
+    path_loader=hdf5_path,
+    path_rf=hdf5_path,
+    path_gabor=hdf5_path,
 )
 
 path_output.mkdir(parents=True, exist_ok=True)
@@ -49,3 +54,5 @@ for nb in nbs:
         raise e
     finally:
         Path(nb + ".ipynb").unlink(missing_ok=True)
+
+
