@@ -9,14 +9,19 @@ import numpy as np
 import seaborn as sns
 from src.gabor_analysis.gabor_fit import GaborFit
 from src.receptive_field.rf import ReceptiveField
+from pathlib import Path
 
 logging.getLogger().setLevel(logging.INFO)
 sns.set()
 
 # %% tags=["parameters"]
-path_loader = "data/superstim.hdf5"
-path_rf = "data/superstim.hdf5"
-path_rf_pcaed = "data/rf_pcaed.npy"
+path_loader = "/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5"
+path_rf = "/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5"
+path_rf_pcaed = "/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18rf_pcaed.npy"
+
+# %%
+path_loader = Path(path_loader)
+path_rf_pcaed = path_loader.parent / (path_loader.stem + "rf_pcaed.npy")
 
 # %%
 rf_pcaed = np.load(path_rf_pcaed)

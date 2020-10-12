@@ -13,17 +13,26 @@ import papermill as pm
 
 """
 
-# +
-name, date = 'TX56', '2020_08_04'
-data_path = '/groups/stringer/home/josephs2/data/text30k_sort_%s_%s.npz' % (name, date)
-hdf5_path = '/groups/stringer/home/josephs2/data/text30k_sort_%s_%s.hdf5' % (name, date)
+# !pwd
 
-nbs = ["preprocess", "run_rf", "retinotopy", "cca_stimuli"]
+# +
+# name, date = 'TX56', '2020_08_04'
+data_path =  '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.npz'
+hdf5_path = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
+
+# nbs = ["preprocess", "run_rf", "retinotopy", "cca_stimuli"]
+nbs = ["retinotopy", "cca_stimuli"]
+
 path_output = Path("outputs/")
+
+import os
+from os import path
+
 # -
 
 parameters = dict(
     path_npz=Path(data_path).with_suffix(".npz").as_posix(),
+    path_img="/groups/pachitariu/pachitariulab/data/STIM/text32_500.mat",
     path_loader=hdf5_path,
     path_rf=hdf5_path,
     path_gabor=hdf5_path,
@@ -54,5 +63,7 @@ for nb in nbs:
         raise e
     finally:
         Path(nb + ".ipynb").unlink(missing_ok=True)
+
+
 
 

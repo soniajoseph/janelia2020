@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 import logging
@@ -286,7 +287,7 @@ class GaborFit(Analyzer):
 
         for i, name in enumerate(self.params_fit.columns):
             ax = axs[i]
-            u = ax.scatter(pos["x"], pos["y"], c=self.params_fit[name], **kwargs)
+            u = ax.scatter(pos["x"], -pos["y"], c=self.params_fit[name], **kwargs)
 
             ax.grid(0)
             ax.set_aspect("equal")
@@ -325,7 +326,7 @@ def gen_test_data(path):
     gabor = GaborFit(n_pc=30, n_iter=500, optimizer={"name": "adam", "step_size": 2e-2}).fit(rf)
     gabor.plot()
     gabor.save_append(path)
-    
-    
+
+
 # if __name__ == "__main__":
 #     gen_test_data("data/test.hdf5")

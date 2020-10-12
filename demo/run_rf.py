@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # %%
 # %cd ../
 # %config InlineBackend.figure_format='retina'
@@ -12,7 +13,7 @@ sns.set()
 logging.getLogger().setLevel(logging.INFO)
 
 # %% tags=["parameters"]
-path_loader = "data/superstim.hdf5"
+path_loader = "/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5"
 
 # %% [markdown]
 """
@@ -41,7 +42,14 @@ rf.save_append(path_loader, overwrite_group=True)
 We use PCA to denoise the RFs. However, the location of the RFs vary across the visual cortex and linear models are not translation and rotation-invariant. Therefore, we split the visual cortex into blocks and perform PCA separately for each block.
 """
 # %%
+from pathlib import Path
+import numpy as np
+
 rf_pcaed = gen_rf_rank_regional(loader, rf, xy_div=(5, 3), plot=True)
 
-# path_loader = Path(path_loader)
-# np.save(path_loader.parent / (path_loader.stem + "rf_pcaed.npy"), rf_pcaed)
+path_loader = Path(path_loader)
+np.save(path_loader.parent / (path_loader.stem + "rf_pcaed.npy"), rf_pcaed)
+
+# %%
+
+# %%

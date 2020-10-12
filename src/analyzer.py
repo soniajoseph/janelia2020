@@ -24,8 +24,8 @@ class Analyzer:
     def __init__(self, load_prev_run=False, **kwargs) -> None:
         self.load_prev_run = load_prev_run
         for k, v in kwargs.items():
-            if self._check_attr(k) is None and k != "path":
-                raise TypeError(f"{type(self).__name__} does not take {k} as argument.")
+#             if self._check_attr(k) is None and k != "path":
+#                 raise TypeError(f"{type(self).__name__} does not take {k} as argument.")
             setattr(self, k, v)
 
     @abstractmethod
@@ -58,6 +58,10 @@ class Analyzer:
             logging.warning("Calling from_hdf5 but file does not have extension .hdf5.")
             
         print(locals().keys())
+        print(cls)
+        print(path)
+        print(load_prev_run)
+        print(kwargs)
             
         return cls(
             path=path,

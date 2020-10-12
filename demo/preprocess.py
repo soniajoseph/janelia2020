@@ -20,7 +20,7 @@ get_ipython().run_line_magic("config", "InlineBackend.figure_format='retina'")
 
 # %% tags=["parameters"]
 # logging.getLogger().setLevel(logging.INFO)
-path_npz = "data/superstim.npz"
+path_npz = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
 
 # %%
 if Path(out_file := Path(path_npz).with_suffix(".hdf5")).exists():
@@ -28,7 +28,7 @@ if Path(out_file := Path(path_npz).with_suffix(".hdf5")).exists():
     loader = SpikeLoader.from_hdf5(out_file)
 else:
     logging.info("Reading from npz.")
-    loader = SpikeLoader.from_npz(path_npz)
+    loader = SpikeLoader.from_npz(path_npz, path_img)
     logging.info("Saving to HDF5.")
     loader.save(out_file)
 

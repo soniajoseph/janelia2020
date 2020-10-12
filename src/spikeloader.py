@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 from functools import cached_property
@@ -13,6 +14,8 @@ from sklearn.model_selection import train_test_split
 
 from .analyzer import Analyzer
 from .utils.io import hdf5_save_from_obj, sha256
+import scipy
+import scipy.io
 
 Path_str = Union[str, Path]
 
@@ -46,7 +49,7 @@ class SpikeLoader(Analyzer):
         self.img_scale = img_scale
 
     @classmethod
-    def from_npz(cls, path: Path_str, img_scale: float = 0.25) -> SpikeLoader:
+    def from_npz(cls, path: Path_str, path_img: Path_str, img_scale: float = 0.25) -> SpikeLoader:
         """Expected file format: npz containing the following arrays:
             - xpos (n_neu × 1): x physical location of neuron.
             - ypos (n_neu × 1): y physical location of neuron.
@@ -68,7 +71,11 @@ class SpikeLoader(Analyzer):
             pos = pd.DataFrame({"x": npz["xpos"], "y": npz["ypos"]})
             istim = pd.Series(npz["istim"], index=npz["frame_start"])
             spks = npz["spks"].T.astype(np.float32)
-            imgs = np.transpose(npz["img"], (2, 0, 1)).astype(np.float32)
+        
+        stims = scipy.io.loadmat('/groups/pachitariu/pachitariulab/data/STIM/text32_500.mat', squeeze_me=True)
+         # images that were shown
+        img = stims['img']
+        imgs = np.transpose(img, (2, 0, 1)).astype(np.float32)
 
         S = zscore(spks[istim.index, :], axis=0).astype(np.float32)
 
