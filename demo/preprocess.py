@@ -20,17 +20,18 @@ get_ipython().run_line_magic("config", "InlineBackend.figure_format='retina'")
 
 # %% tags=["parameters"]
 # logging.getLogger().setLevel(logging.INFO)
-path_npz = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
+path_npz = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18_coding_neurons.npz'
 
 # %%
-if Path(out_file := Path(path_npz).with_suffix(".hdf5")).exists():
+load_hdf5=False
+if Path(out_file := Path(path_npz).with_suffix(".hdf5")).exists() and load_hdf5:
     logging.info("HDF5 exists, loading.")
     loader = SpikeLoader.from_hdf5(out_file)
 else:
     logging.info("Reading from npz.")
-    loader = SpikeLoader.from_npz(path_npz, path_img)
+    loader = SpikeLoader.from_npz(path_npz)
     logging.info("Saving to HDF5.")
-    loader.save(out_file)
+    loader.save(out_file, overwrite=True)
 
 # %%
 fig, ax = plt.subplots()
@@ -38,9 +39,12 @@ ax.scatter(loader.pos.x, loader.pos.y, s=0.5, alpha=0.2)
 ax.set_aspect("equal")
 
 # %%
-print(f"(Stim x Neu): {loader.spks.shape}")
-print(f"Number of spont frames: {loader.idx_spont.size}")
-print(f"Repeated stims: {loader.get_idx_rep().shape}")
+try:
+    print(f"(Stim x Neu): {loader.spks.shape}")
+    print(f"Number of spont frames: {loader.idx_spont.size}")
+    print(f"Repeated stims: {loader.get_idx_rep().shape}")
+except:
+    pass 
 
 # %% [markdown]
 # ### Correlations between the spiking responses of repeated and non-repeated stimuli.
@@ -60,3 +64,4 @@ corr_check(np.arange(1000), np.arange(1000, 2000), "Non-repeat")
 plt.legend()
 
 # %%
+ 

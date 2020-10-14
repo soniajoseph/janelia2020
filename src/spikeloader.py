@@ -49,7 +49,7 @@ class SpikeLoader(Analyzer):
         self.img_scale = img_scale
 
     @classmethod
-    def from_npz(cls, path: Path_str, path_img: Path_str, img_scale: float = 0.25) -> SpikeLoader:
+    def from_npz(cls, path: Path_str, path_img: str=None, istim: bool=False, img_scale: float = 0.25) -> SpikeLoader:
         """Expected file format: npz containing the following arrays:
             - xpos (n_neu × 1): x physical location of neuron.
             - ypos (n_neu × 1): y physical location of neuron.
@@ -69,15 +69,21 @@ class SpikeLoader(Analyzer):
         npzhash = sha256(path)
         with np.load(path, mmap_mode="r") as npz:
             pos = pd.DataFrame({"x": npz["xpos"], "y": npz["ypos"]})
+            
             istim = pd.Series(npz["istim"], index=npz["frame_start"])
+            
             spks = npz["spks"].T.astype(np.float32)
-        
-        stims = scipy.io.loadmat('/groups/pachitariu/pachitariulab/data/STIM/text32_500.mat', squeeze_me=True)
-         # images that were shown
-        img = stims['img']
-        imgs = np.transpose(img, (2, 0, 1)).astype(np.float32)
-
-        S = zscore(spks[istim.index, :], axis=0).astype(np.float32)
+            
+            if path_img is None:
+                img = npz['img']
+                imgs = np.transpose(img, (2, 0, 1)).astype(np.float32)
+                
+            print(spks.shape)
+            
+            if istim is True:
+                S = zscore(spks[istim.index, :], axis=0).astype(np.float32)
+            else:
+                S = zscore(spks, axis=0).astype(np.float32)
 
         def _imgs_stim():
             X = ndi.zoom(imgs[istim, ...], (1, img_scale, img_scale), order=1)
@@ -85,6 +91,7 @@ class SpikeLoader(Analyzer):
             X = np.reshape(X, [len(istim), -1])
             return img_dim, zscore(X, axis=0) / np.sqrt(len(istim)).astype(np.float32)
 
+        
         img_dim, imgs_stim = _imgs_stim()
 
         del npz, _imgs_stim
@@ -135,7 +142,7 @@ class SpikeLoader(Analyzer):
                 invert=True,
             )
         )[0]  # Invert indices.
-        
+        print("idx_spont", idx_spont)
         assert idx_spont.size + self.istim.index.size == self.spks.shape[0]
         return idx_spont
 
