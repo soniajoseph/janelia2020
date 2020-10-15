@@ -67,23 +67,23 @@ class SpikeLoader(Analyzer):
         """
         
         npzhash = sha256(path)
-        with np.load(path, mmap_mode="r") as npz:
-            pos = pd.DataFrame({"x": npz["xpos"], "y": npz["ypos"]})
-            
-            istim = pd.Series(npz["istim"], index=npz["frame_start"])
-            
-            spks = npz["spks"].T.astype(np.float32)
-            
-            if path_img is None:
-                img = npz['img']
-                imgs = np.transpose(img, (2, 0, 1)).astype(np.float32)
+#         with np.load(path, allow_pickle=True) as npz:
+        npz = np.load(path, allow_pickle=True)
+        pos = pd.DataFrame({"x": npz["xpos"], "y": npz["ypos"]})
+        istim = pd.Series(npz["istim"], index=npz["frame_start"])
+        spks = npz["spks"].T.astype(np.float32)
+        print("spks shape: ", spks.shape)
+
+        if path_img is None:
+            imgs = npz['imgs']
+        else: 
+            imgs = scipy.io.loadmat(path_img)['img']
                 
-            print(spks.shape)
-            
-            if istim is True:
-                S = zscore(spks[istim.index, :], axis=0).astype(np.float32)
-            else:
-                S = zscore(spks, axis=0).astype(np.float32)
+        imgs = np.transpose(imgs, (2, 0, 1)).astype(np.float32)
+
+        S = zscore(spks[istim.index, :], axis=0).astype(np.float32)
+        print(spks.shape)
+        print(istim.index)
 
         def _imgs_stim():
             X = ndi.zoom(imgs[istim, ...], (1, img_scale, img_scale), order=1)
@@ -91,11 +91,11 @@ class SpikeLoader(Analyzer):
             X = np.reshape(X, [len(istim), -1])
             return img_dim, zscore(X, axis=0) / np.sqrt(len(istim)).astype(np.float32)
 
-        
         img_dim, imgs_stim = _imgs_stim()
 
         del npz, _imgs_stim
         return cls(**{k: v for k, v in locals().items() if k != "cls"})
+    
 
     @overload
     def get_idx_rep(self, return_onetimers: Literal[True], stim_idx: bool) -> Tuple[ndarray, ndarray]:

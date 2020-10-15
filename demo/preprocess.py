@@ -21,15 +21,17 @@ get_ipython().run_line_magic("config", "InlineBackend.figure_format='retina'")
 # %% tags=["parameters"]
 # logging.getLogger().setLevel(logging.INFO)
 path_npz = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18_coding_neurons.npz'
+path_img = '/groups/pachitariu/pachitariulab/data/STIM/text32_500.mat'
 
 # %%
-load_hdf5=False
-if Path(out_file := Path(path_npz).with_suffix(".hdf5")).exists() and load_hdf5:
+load_hdf5=True
+out_file=path_hdf5
+if Path(Path(out_file).with_suffix(".hdf5")).exists() and load_hdf5:
     logging.info("HDF5 exists, loading.")
-    loader = SpikeLoader.from_hdf5(out_file)
+    loader = SpikeLoader.from_hdf5(out_file, path_img)
 else:
     logging.info("Reading from npz.")
-    loader = SpikeLoader.from_npz(path_npz)
+    loader = SpikeLoader.from_npz(path_npz, path_img)
     logging.info("Saving to HDF5.")
     loader.save(out_file, overwrite=True)
 
@@ -64,4 +66,6 @@ corr_check(np.arange(1000), np.arange(1000, 2000), "Non-repeat")
 plt.legend()
 
 # %%
- 
+
+
+# %%

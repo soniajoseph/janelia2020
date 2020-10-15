@@ -172,7 +172,9 @@ def gen_rf_rank(rfs: np.ndarray, n_pc: int, seed: int = 455) -> np.ndarray:
 
     adjusted_npca = min(3 * n_pc, *coef.shape)  # Increase accuracy for randomized SVD.
     if adjusted_npca < n_pc:
-        raise ValueError("Size of B lower than requested number of PCs.")
+        n_pc = adjusted_npca # reduce size
+#         raise ValueError("Size of B lower than requested number of PCs. Adjusted_npca", adjusted_npca,
+#                         "n_pc:", n_pc)
 
     model = PCA(n_components=adjusted_npca, random_state=np.random.RandomState(seed)).fit(coef)
     X = model.components_[:n_pc, :]
@@ -180,6 +182,7 @@ def gen_rf_rank(rfs: np.ndarray, n_pc: int, seed: int = 455) -> np.ndarray:
     return ReceptiveField.reshape_rf(B_reduced.T, rfs_shape[1:])
 
 
+# +
 def gen_rf_rank_regional(
     loader: SpikeLoader,
     rf: ReceptiveField,
@@ -220,7 +223,7 @@ def gen_rf_rank_regional(
             
             rf_pcaed[idx] = gen_rf_rank(rf.rf_[idx], n_pc, seed)
             
-    assert np.all(np.isfinite(rf_pcaed))
+#     assert np.all(np.isfinite(rf_pcaed))
     # not_captured = loader.pos.iloc[np.argwhere(~np.isfinite(np.max(rf_pcaed, axis=(1, 2)))).squeeze()]
     if plot:
         plt.scatter(pos.x, pos.y, s=0.8, alpha=0.5)
@@ -230,6 +233,8 @@ def gen_rf_rank_regional(
 
     return rf_pcaed
 
+
+# -
 
 def gen_test_data(path: str) -> None:
     loader = SpikeLoader.from_hdf5(path)

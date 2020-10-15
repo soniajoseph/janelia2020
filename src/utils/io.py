@@ -77,7 +77,10 @@ def hdf5_save(path: Path_s, group: str, *,
 
     if dfs is not None:
         for k, v in dfs.items():
-            v.to_hdf(path, f'{group}/{k}', complib=complib)
+            try:
+                v.to_hdf(path, f'{group}/{k}', complib=complib)
+            except:
+                raise Exception(v)
 
 
 def hdf5_save_from_obj(path: Path_s, group: str, obj, *,
