@@ -69,6 +69,11 @@ class SpikeLoader(Analyzer):
         npzhash = sha256(path)
 #         with np.load(path, allow_pickle=True) as npz:
         npz = np.load(path, allow_pickle=True)
+    
+        # if dict stored in array 
+        if isinstance(npz, (np.ndarray)):
+            npz = npz[()]
+        
         pos = pd.DataFrame({"x": npz["xpos"], "y": npz["ypos"]})
         istim = pd.Series(npz["istim"], index=npz["frame_start"])
         spks = npz["spks"].T.astype(np.float32)

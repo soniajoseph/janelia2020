@@ -20,11 +20,11 @@ sns.set()
 # path_gabor = "data/superstim_TX60_allsort_gabor.hdf5"
 
 # %%
-# Parameters
-path_npz = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.npz' 
-path_loader = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
-path_rf = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
-path_gabor = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
+# # Parameters
+# path_npz = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.npz' 
+# path_loader = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
+# path_rf = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
+# path_gabor = '/groups/stringer/home/josephs2/data/text32_500_TX59_2020_08_18.hdf5' 
 
 
 # %%

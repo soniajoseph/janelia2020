@@ -24,9 +24,10 @@ os.path.isdir(data_root)
 path_img = "/groups/pachitariu/pachitariulab/data/STIM/text32_500.mat"
 
 # loop over experiments
-dbs = [{'mouse_name': 'TX57', 'date': '2020_08_18'},
-       {'mouse_name': 'TX58', 'date': '2020_08_14'},
-       {'mouse_name': 'TX59', 'date': '2020_08_05'},
+dbs = [
+#     {'mouse_name': 'TX57', 'date': '2020_08_18'},
+#        {'mouse_name': 'TX58', 'date': '2020_08_14'},
+#        {'mouse_name': 'TX59', 'date': '2020_08_05'}, # has error in istim. check nb.
        {'mouse_name': 'TX59', 'date': '2020_08_18'},
        {'mouse_name': 'TX60', 'date': '2020_08_14'}
       ]
@@ -39,9 +40,8 @@ for db in dbs:
     hdf5_path = '/groups/stringer/home/josephs2/data/' + os.path.splitext(file_name)[0] + '.hdf5'
     print("Saving at ", hdf5_path)
 
-    path_img = "/groups/pachitariu/pachitariulab/data/STIM/text32_500.mat"
-
     nbs = ["preprocess", "run_rf", "run_gabor", "retinotopy", "cca_stimuli"]
+#     nbs = ['run_gabor']
 
     path_output = Path("outputs/" + 'text32_500_%s_%s_'%(db['mouse_name'], db['date']))
     
@@ -57,6 +57,7 @@ for db in dbs:
     
     for nb in nbs:
         try:
+            
             ntb = jupytext.read(nb + ".py")
             ntb.metadata["kernelspec"] = {
                 "display_name": "Python 3",
@@ -74,7 +75,7 @@ for db in dbs:
 
         except pm.exceptions.PapermillExecutionError as e:
             logging.error(f"Error at {nb}.")
-            raise e
+            continue
         finally:
             Path(nb + ".ipynb").unlink(missing_ok=True)
 
