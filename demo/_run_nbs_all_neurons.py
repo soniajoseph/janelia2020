@@ -27,9 +27,9 @@ path_img = "/groups/pachitariu/pachitariulab/data/STIM/text32_500.mat"
 dbs = [
 #     {'mouse_name': 'TX57', 'date': '2020_08_18'},
 #        {'mouse_name': 'TX58', 'date': '2020_08_14'},
-#        {'mouse_name': 'TX59', 'date': '2020_08_05'}, # has error in istim. check nb.
-       {'mouse_name': 'TX59', 'date': '2020_08_18'},
-       {'mouse_name': 'TX60', 'date': '2020_08_14'}
+       {'mouse_name': 'TX59', 'date': '2020_08_05'}, 
+#        {'mouse_name': 'TX59', 'date': '2020_08_18'},
+#        {'mouse_name': 'TX60', 'date': '2020_08_14'}
       ]
 
 for db in dbs:

@@ -75,7 +75,10 @@ class SpikeLoader(Analyzer):
             npz = npz[()]
         
         pos = pd.DataFrame({"x": npz["xpos"], "y": npz["ypos"]})
+        
         istim = pd.Series(npz["istim"], index=npz["frame_start"])
+        
+        
         spks = npz["spks"].T.astype(np.float32)
         print("spks shape: ", spks.shape)
 
@@ -83,12 +86,13 @@ class SpikeLoader(Analyzer):
             imgs = npz['imgs']
         else: 
             imgs = scipy.io.loadmat(path_img)['img']
+        
+        # in case istim goes over max value
+        istim[istim > len(imgs)] = 0
                 
         imgs = np.transpose(imgs, (2, 0, 1)).astype(np.float32)
 
         S = zscore(spks[istim.index, :], axis=0).astype(np.float32)
-        print(spks.shape)
-        print(istim.index)
 
         def _imgs_stim():
             X = ndi.zoom(imgs[istim, ...], (1, img_scale, img_scale), order=1)
